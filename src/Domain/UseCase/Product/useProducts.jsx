@@ -5,12 +5,9 @@ const useProducts = (str) => {
     // eslint-disable-next-line default-case
     switch (action.type) {
       case "single":
-        return (state = rows.filter((t, i) => {
-          return i === 0 && t;
-        }));
+        return (state = rows.map((t) => t));
     }
   };
-
   const [products, dispatch] = useReducer(productReducer, str);
   //const [result, setResult] = useState(rows);
 
