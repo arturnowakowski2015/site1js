@@ -1,14 +1,25 @@
 import { useBuildRows } from "../Hooks/useBuildRows";
 const Rows = ({ data, columns }) => {
-  const [filteredRows] = useBuildRows(data, columns);
+  const [rows] = useBuildRows(data, columns);
+  alert(JSON.stringify(rows));
+
   return (
     <>
-      {filteredRows &&
-        filteredRows.map((row, i) => {
+      {rows &&
+        rows.map((row, i) => {
           return (
-            <th key={i}>
-              <div>{row}</div>
-            </th>
+            <tr>
+              {" "}
+              {row.map((t) => {
+                return (
+                  <th key={i}>
+                    <div>
+                      {i}....{t}
+                    </div>
+                  </th>
+                );
+              })}{" "}
+            </tr>
           );
         })}
     </>

@@ -1,27 +1,28 @@
 import { useState, useEffect } from "react";
 const useBuildRows = (data, columns) => {
-  const [filteredRows, setFilteredRows] = useState([]);
-
+  const [rows, setRows] = useState([]);
+  let temprows = [];
   const buildRows = (row) => {
-    let tr =
+    temprows = [
+      ...temprows,
       row &&
-      Object.keys(row).map((k, j) => {
-        return (
-          row !== undefined &&
-          typeof row[k] !== "object" &&
-          columns[j] &&
-          columns[j].col.disp === true &&
-          row[k]
-        );
-      });
-
-    setFilteredRows(tr);
+        Object.keys(row).map((k, j) => {
+          return (
+            row !== undefined &&
+            typeof row[k] !== "object" &&
+            columns[j] &&
+            columns[j].col.disp === true &&
+            row[k]
+          );
+        }),
+    ];
   };
 
   useEffect(() => {
     data.map(buildRows);
+    setRows(temprows);
   }, [data]);
 
-  return [filteredRows];
+  return [rows];
 };
 export { useBuildRows };
