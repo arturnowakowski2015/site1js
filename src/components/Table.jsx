@@ -1,19 +1,22 @@
 import { useState, useEffect } from "react";
 import Columns from "./Columns";
-export default function Table({ data = [], checkall, columns }) {
+import Rows from "./Rows";
+export default function Table({ data = [], columns }) {
   const [selCol, setSelCol] = useState([]);
   //const data0 = data && Object.keys(data[0])
-  // alert(columns+"  ::MMMMM    " +  Object.keys(data[0]));
+
   useEffect(() => {
-    setSelCol(data[0] && Object.keys(data[0]));
-  }, [data]);
+    setSelCol(columns);
+  }, [columns]);
 
   return (
     <table>
       <thead className="th">
         <Columns tocompare={selCol} columns={columns} />
       </thead>
-      <tbody></tbody>
+      <tbody>
+        <Rows data={data} columns={selCol != undefined && selCol} />
+      </tbody>
     </table>
   );
 }

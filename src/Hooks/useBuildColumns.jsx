@@ -61,10 +61,8 @@ const useBuildColumns = (columns, tocompare) => {
           return columns[ii] && columns[ii].col.disp === true && k;
         })
     );
-  }, []);
-  alert(
-    JSON.stringify(tocompare) + " col   " + JSON.stringify(filteredColumns)
-  );
+  }, [columns]);
+
   return [filteredColumns];
 };
 export { useBuildColumns };
