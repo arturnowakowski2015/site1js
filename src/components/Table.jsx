@@ -7,7 +7,6 @@ export default function Table({ data = [], columns }) {
 
   useEffect(() => {
     setSelCol(columns);
-    alert("str   " + JSON.stringify(selCol));
   }, [columns]);
 
   return (

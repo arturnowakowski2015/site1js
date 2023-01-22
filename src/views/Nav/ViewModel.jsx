@@ -9,7 +9,6 @@ const useView = () => {
     setNavIcon(!navIcon);
 
     openIcon.current = navIcon ? "nav_icon" : "nav_icon_hover";
-    //alert(openIcon + "::");
   };
   const onClick = () => {
     setWrapperOption(!wrapperOption);
