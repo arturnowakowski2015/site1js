@@ -18,7 +18,7 @@ export default function DataView({ category }) {
           padding: 10,
         }}
       >
-        <Table data={data} checkall={checkall} columns={columns} />
+        <Table data={data} columns={columns} checkall={checkall} />
       </div>
     </div>
   );

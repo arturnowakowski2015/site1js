@@ -10,6 +10,7 @@ const Home = () => {
     new: [],
     set: ["labels", "received", "new", "selected", "postponed", "removed"],
   });
+
   useEffect(() => {
     setCategories({
       ...categories,
