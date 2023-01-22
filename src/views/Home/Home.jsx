@@ -15,7 +15,6 @@ const Home = () => {
       ...categories,
       actual: { cat: "new", l: 0 },
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <div className="main-content">

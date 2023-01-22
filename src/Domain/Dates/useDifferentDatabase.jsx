@@ -50,7 +50,6 @@ const useDifferentDatabase = (idurl, category) => {
 
   useEffect(() => {
     loadDatabase();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category]);
   return [data[category], columns];
 };

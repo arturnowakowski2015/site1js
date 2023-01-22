@@ -7,7 +7,6 @@ export default function DataView({ category }) {
   const [data, columns, checkall, changeDatabase] = useView(1, category);
   useEffect(() => {
     changeDatabase();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category]);
   return (
     <div className="page">
