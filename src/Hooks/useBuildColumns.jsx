@@ -52,7 +52,7 @@ const useView = (idurl, actualcategory) => {
 
 */
 import { useState, useEffect } from "react";
-const useBuildColumns = (columns, tocompare) => {
+const useBuildColumns = (tocompare, columns) => {
   const [filteredColumns, setFilteredColumns] = useState([]);
   useEffect(() => {
     setFilteredColumns(

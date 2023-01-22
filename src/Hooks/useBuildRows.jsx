@@ -5,10 +5,13 @@ const useBuildRows = (data, columns) => {
   const buildRows = (row) => {
     let tr =
       row &&
-      columns != false &&
       Object.keys(row).map((k, j) => {
         return (
-          row != undefined && typeof row[k] !== "object" && columns[j] && row[k]
+          row !== undefined &&
+          typeof row[k] !== "object" &&
+          columns[j] &&
+          columns[j].col.disp === true &&
+          row[k]
         );
       });
 

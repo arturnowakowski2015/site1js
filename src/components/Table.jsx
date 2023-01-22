@@ -7,11 +7,12 @@ export default function Table({ data = [], columns }) {
 
   useEffect(() => {
     setSelCol(columns);
+    alert("str   " + JSON.stringify(selCol));
   }, [columns]);
 
   return (
     <table>
-      <thead className="th">
+      <thead>
         <Columns tocompare={selCol} columns={columns} />
       </thead>
       <tbody>

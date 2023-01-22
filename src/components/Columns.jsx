@@ -1,6 +1,6 @@
 import { useBuildColumns } from "../Hooks/useBuildColumns";
 const Columns = ({ tocompare, columns }) => {
-  const [filteredColumns] = useBuildColumns(columns, tocompare);
+  const [filteredColumns] = useBuildColumns(tocompare, columns);
 
   return (
     <>
@@ -8,7 +8,7 @@ const Columns = ({ tocompare, columns }) => {
         filteredColumns.map((column, i) => {
           return (
             <th key={i}>
-              <div>{column}</div>
+              <div>{column.col.title}</div>
             </th>
           );
         })}
