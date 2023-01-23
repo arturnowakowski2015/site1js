@@ -1,17 +1,26 @@
 import { useState, useEffect, useMemo } from "react";
+import { useSort } from "../Hooks/useSort";
 import Columns from "./Columns";
 import Rows from "./Rows";
 import Pagination from "./Pagination";
 let PageSize = 10;
 
 export default function Table({ data = [], columns }) {
+  const { sortedData, sortData } = useSort();
   const [currentPage, setCurrentPage] = useState(1);
   const [selCol, setSelCol] = useState([]);
+  const on = (columnId) => {
+    sortData(columnId, data);
+
+    return sortedData;
+  };
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
-    return data.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage, columns]);
+    if (sortedData.length > 0)
+      return sortedData.slice(firstPageIndex, lastPageIndex);
+    else return data.slice(firstPageIndex, lastPageIndex);
+  }, [currentPage, columns, on]);
 
   //const data0 = data && Object.keys(data[0])
 
@@ -24,7 +33,11 @@ export default function Table({ data = [], columns }) {
       {" "}
       <table>
         <thead>
-          <Columns tocompare={selCol} columns={columns} />
+          <Columns
+            tocompare={selCol}
+            columns={columns}
+            onSort={(columnId) => on(columnId)}
+          />
         </thead>
         <tbody>
           <Rows
@@ -45,127 +58,8 @@ export default function Table({ data = [], columns }) {
 }
 
 /*
-
-
-
-
-import React, { useEffect, useState } from 'react';
-import ReactDOM from 'react-dom';
-import ReactPaginate from 'react-paginate';
-
-// Example items, to simulate fetching from another resources.
-const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
-
-function Items({ currentItems }) {
-  return (
-    <>
-      {currentItems &&
-        currentItems.map((item) => (
-          <div>
-            <h3>Item #{item}</h3>
-          </div>
-        ))}
-    </>
-  );
-}
-
-function PaginatedItems({ itemsPerPage }) {
-  // Here we use item offsets; we could also use page offsets
-  // following the API or data you're working with.
-  const [itemOffset, setItemOffset] = useState(0);
-
-  // Simulate fetching items from another resources.
-  // (This could be items from props; or items loaded in a local state
-  // from an API endpoint with useEffect and useState)
-  const endOffset = itemOffset + itemsPerPage;
-  console.log(`Loading items from ${itemOffset} to ${endOffset}`);
-  const currentItems = items.slice(itemOffset, endOffset);
-  const pageCount = Math.ceil(items.length / itemsPerPage);
-
-  // Invoke when user click to request another page.
-  const handlePageClick = (event) => {
-    const newOffset = (event.selected * itemsPerPage) % items.length;
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
-    setItemOffset(newOffset);
-  };
-
-  return (
-    <>
-      <Items currentItems={currentItems} />
-      <ReactPaginate
-        breakLabel="..."
-        nextLabel="next >"
-        onPageChange={handlePageClick}
-        pageRangeDisplayed={5}
-        pageCount={pageCount}
-        previousLabel="< previous"
-        renderOnZeroPageCount={null}
-      />
-    </>
-  );
-}
-
-// Add a <div id="container"> to your HTML to see the componend rendered.
-ReactDOM.render(
-  <PaginatedItems itemsPerPage={4} />,
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ 
+ 
 
 
         {data && data[0]

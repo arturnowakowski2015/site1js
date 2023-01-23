@@ -1,3 +1,4 @@
+import "../views/scss/button.scss";
 export default function Button({ className, onMouseOver, onClick, title }) {
   return (
     <div
