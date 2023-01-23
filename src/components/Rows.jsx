@@ -1,7 +1,6 @@
 import { useBuildRows } from "../Hooks/useBuildRows";
 const Rows = ({ data, columns }) => {
   const [rows] = useBuildRows(data, columns);
-  alert(JSON.stringify(rows));
 
   return (
     <>
