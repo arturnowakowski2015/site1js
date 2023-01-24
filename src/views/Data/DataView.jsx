@@ -23,10 +23,3 @@ export default function DataView({ category }) {
     </div>
   );
 }
-
-/*<List
-        data={array}
-        onRowClick={(id) => navigate(`/product/detail/${id}`)}
-      />
-
-      */

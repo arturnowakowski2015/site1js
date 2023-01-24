@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import TreeMenu from "../Menu/TreeMenuView";
 import DataView from "../Data/DataView";
 import Button from "../../components/Button";
 import "../scss/style.scss";
@@ -19,6 +19,7 @@ const Home = () => {
   }, []);
   return (
     <div className="main-content">
+      <TreeMenu />
       <Button
         title={categories.actual.cat}
         onClick={() => {
