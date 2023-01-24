@@ -7,17 +7,16 @@ const Rows = ({ data, columns }) => {
       {rows &&
         rows.map((row, i) => {
           return (
-            <tr>
-              {" "}
-              {row.map((t) => {
+            <tr key={i}>
+              {row.map((t, j) => {
                 return (
-                  <th key={i}>
+                  <th key={j}>
                     <div>
                       {i}....{t}
                     </div>
                   </th>
                 );
-              })}{" "}
+              })}
             </tr>
           );
         })}

@@ -22,7 +22,6 @@ const Columns = ({ tocompare, columns, onSort }) => {
       title: "",
       class: [...chevron.class],
     });
-    //alert(JSON.stringify(chevron.class));
   }, [filteredColumns]);
   //
   return (

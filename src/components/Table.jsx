@@ -33,11 +33,13 @@ export default function Table({ data = [], columns }) {
       {" "}
       <table>
         <thead>
-          <Columns
-            tocompare={selCol}
-            columns={columns}
-            onSort={(columnId) => on(columnId)}
-          />
+          <tr>
+            <Columns
+              tocompare={selCol}
+              columns={columns}
+              onSort={(columnId) => on(columnId)}
+            />
+          </tr>
         </thead>
         <tbody>
           <Rows
