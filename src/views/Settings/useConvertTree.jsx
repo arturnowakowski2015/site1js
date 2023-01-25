@@ -1,6 +1,10 @@
 const useConvertTree = (flattenarr) => {
   let id = 0;
   let i = 0;
+  const zero = (tr, tree, pid) => {
+    id = 0;
+    treetoarr(tr, tree, pid);
+  };
   const treetoarr = (tr, tree, pid) => {
     tree &&
       tree.map((t) =>
@@ -16,10 +20,10 @@ const useConvertTree = (flattenarr) => {
 
     i < 1 ? (i = 0) : (pid.pop(), --i);
   };
-  const arrtotree = (list) => {
+  const arrtotree = (list1) => {
+    let list = list1;
     var map = {},
       node,
-      roots = [],
       i;
 
     for (i = 0; i < list.length; i += 1) {
@@ -35,40 +39,26 @@ const useConvertTree = (flattenarr) => {
       }
     }
 
-    for (let i = list.length - 1; i > 0; i--)
+    for (let i = 0; i < list.length; i++)
       if (list[i].pid !== 0 || list[i].pid == 6) {
-        alert(list[i].name);
         list.splice(i, 1);
         //          list.splice(i, 1);
       }
-    console.log(JSON.stringify(list));
-    return roots;
-  };
+    for (let i = list.length - 1; i > 0; i--)
+      if (list[i].pid !== 0 || list[i].pid == 6) {
+        list.splice(i, 1);
+        //          list.splice(i, 1);
+      }
 
-  return { flattenarr, treetoarr, arrtotree };
+    return deleteparenthises(list);
+  };
+  const deleteparenthises = (nodes) => {
+    return nodes.map((t) => {
+      if (t.children.length === 0) delete t.children;
+      if (t.children) deleteparenthises(t.children);
+      return t;
+    });
+  };
+  return { flattenarr, zero, arrtotree };
 };
 export { useConvertTree };
-
-/*
-
-
-let new_array=array.map(function(ele){
-       
-       return {...ele,Active:'false'};
-     })
-
-
-[{"id":1,"pid":0},
-{"name":"received","id":2,"pid":0},
-
-{"name":"rer","id":3,"pid":0},
-{"name":"bevad","id":4,"pid":3},
-
-{"name":"new","id":5,"pid":0},
-{"name":"selected","id":6,"pid":3},
-{"name":"postponed","id":7,"pid":5},
-{"name":"removed","id":8,"pid":6},
-
-{"name":"labels","id":9,"pid":0}]
-
-*/

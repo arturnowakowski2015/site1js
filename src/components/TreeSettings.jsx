@@ -1,5 +1,12 @@
 import "../views/scss/tree.scss";
-export default function TreeSettings({ tree, flattenarr, arrtotree }) {
+export default function TreeSettings({
+  tree,
+  flattenarr,
+  onMouseDown,
+  onDragOver,
+  onDragLeave,
+  onDragEnd,
+}) {
   return (
     <>
       {tree &&
@@ -9,23 +16,21 @@ export default function TreeSettings({ tree, flattenarr, arrtotree }) {
               <p
                 className="label"
                 draggable="true"
-                onMouseDown={(e) => {
-                  if (e.dataTransfer)
-                    e.dataTransfer.setData("text", e.target.id);
-                  arrtotree(flattenarr, -1, "parentId");
-                }}
-                onDragOver={(e) => {
-                  e.preventDefault();
-                  if (e.dataTransfer) e.dataTransfer.getData("text");
-                }}
+                onMouseDown={(e) => onMouseDown(e, t.name)}
+                onDragOver={(e) => onDragOver(e, t.name)}
+                onDragLeave={(e) => onDragLeave(e)}
+                onDragEnd={() => onDragEnd()}
               >
-                aa
                 {t.name}
               </p>
+
               <TreeSettings
                 tree={t.children}
+                onMouseDown={onMouseDown}
+                onDragOver={onDragOver}
                 flattenarr={flattenarr}
-                arrtotree={arrtotree}
+                onDragLeave={onDragLeave}
+                onDragEnd={onDragEnd}
               />
             </div>
           );
