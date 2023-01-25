@@ -10,6 +10,11 @@ const Settings = () => {
     zero(flattenarr, tree.children, [0]);
     setTreee(tree.children);
     // arrtotree(tree.children, 0);
+  }, []);
+  useEffect(() => {
+    zero(flattenarr, tree, [0]);
+
+    // arrtotree(tree.children, 0);
   }, [flattenarr]);
   let mode = 0;
   const onMouseDown = (e, name) => {
