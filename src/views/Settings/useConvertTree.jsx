@@ -1,64 +1,77 @@
 const useConvertTree = (flattenarr) => {
   let id = 0;
   let i = 0;
-  const zero = (tr, tree, pid) => {
+  let level = 0;
+  const zerotreetoarr = (tr, tree, pid) => {
     id = 0;
     treetoarr(tr, tree, pid);
+    delpar(tr);
   };
+
   const treetoarr = (tr, tree, pid) => {
     tree &&
       tree.map((t) =>
         tr.push({
-          name: t.name,
+          name: t.root ? "root" : t.name,
           id: ++id,
           pid: pid[i],
+          level: level,
           ...(t.children
-            ? ((pid.push(id), ++i), treetoarr(tr, t.children, pid))
-            : treetoarr(tr, t.children, pid)),
+            ? (level++, (pid.push(id), ++i), treetoarr(tr, t.children, pid))
+            : ""),
         })
       );
-
+    level--;
     i < 1 ? (i = 0) : (pid.pop(), --i);
   };
+
   const arrtotree = (list1) => {
     let list = list1;
-    var map = {},
-      node,
-      i;
-
+    i;
+    var byDate = list.slice(0);
+    list = byDate.sort(function (a, b) {
+      return a.id - b.id;
+    });
+    //
     for (i = 0; i < list.length; i += 1) {
-      map[list[i].id] = i; // initialize the map
       list[i].children = []; // initialize the children
     }
-
-    for (i = 0; i < list.length; i += 1) {
-      node = list[i];
-      if (node.pid !== "0") {
-        // if you have dangling branches check that map[node.parentId] exists
-        list[map[node.pid]] && list[map[node.pid]].children.push(node);
-      }
+    let temp = list;
+    for (let i = 0; i < list.length; i++) {
+      fillarr(temp[i], list);
     }
+    for (let i = temp.length - 1; i > 0; i--)
+      if (temp[i].pid !== 0) temp.splice(i, 1);
+    let flattenarr = delpar(temp);
+    console.log("..........................." + JSON.stringify(flattenarr)); // if you have dangling branches check that map[node.parentId] exists
 
-    for (let i = 0; i < list.length; i++)
-      if (list[i].pid !== 0 || list[i].pid == 6) {
-        list.splice(i, 1);
-        //          list.splice(i, 1);
-      }
-    for (let i = list.length - 1; i > 0; i--)
-      if (list[i].pid !== 0 || list[i].pid == 6) {
-        list.splice(i, 1);
-        //          list.splice(i, 1);
-      }
-
-    return deleteparenthises(list);
+    return flattenarr;
   };
-  const deleteparenthises = (nodes) => {
-    return nodes.map((t) => {
-      if (t.children.length === 0) delete t.children;
-      if (t.children) deleteparenthises(t.children);
+
+  const fillarr = (list, array) => {
+    let y = array.filter((t) => {
+      return t.pid == list.id && t;
+    });
+
+    for (let i = 0; i < y.length; i++) {
+      list.children &&
+        list.children.push({
+          name: y[i].name,
+          id: y[i].id,
+          pid: y[i].pid,
+          children: [],
+        });
+      list.children && fillarr(list.children[i], array);
+    }
+  };
+
+  const delpar = (arr) => {
+    return arr.map((t) => {
+      if (t.children && t.children.length === 0) delete t.children;
+      if (t.children) delpar(t.children);
       return t;
     });
   };
-  return { flattenarr, zero, arrtotree };
+  return { flattenarr, zerotreetoarr, arrtotree };
 };
 export { useConvertTree };
