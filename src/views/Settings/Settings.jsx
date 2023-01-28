@@ -1,81 +1,91 @@
+import React, { useEffect, useState } from "react";
 import TreeSettings from "../../components/TreeSettings";
-import { useEffect, useState } from "react";
 import { tree } from "../../data/dummy";
 import { useConvertTree } from "./useConvertTree";
-let el = null;
-const Settings = () => {
-  const [treee, setTreee] = useState(tree.children);
-  let { flattenarr, zero, arrtotree } = useConvertTree([]);
-  useEffect(() => {
-    zero(flattenarr, tree.children, [0]);
-    setTreee(tree.children);
-    // arrtotree(tree.children, 0);
-  }, []);
-  useEffect(() => {
-    zero(flattenarr, tree, [0]);
 
-    // arrtotree(tree.children, 0);
-  }, [flattenarr]);
-  let mode = 0;
+const Settings = () => {
+  //const [data, setData] = useState([]);
+  const [el, setEl] = useState({});
+  let { flattenarr, zerotreetoarr } = useConvertTree([]);
+  const [data, dispatch] = React.useReducer(dataReducer, flattenarr);
+  useEffect(() => {
+    zerotreetoarr(flattenarr, tree.children, [0]);
+    flattenarr.sort((a, b) => a.id - b.id);
+
+    dispatch({ type: "start" });
+    console.log(data);
+    //setData(flattenarr);
+  }, []);
+
   const onMouseDown = (e, name) => {
+    console.log(data);
     if (e.dataTransfer) e.dataTransfer.setData("text", e.target.id);
-    el = findel(name);
+    let act = findel(name);
+    setEl((el) => ({ ...el, old: act }));
+    let newArr = findel(name);
+
+    dispatch({ type: "add", newArr: newArr[0] });
   };
   const onDragLeave = (e) => {
     e.preventDefault();
-    mode = 0;
   };
   const onDragOver = (e, name) => {
     e.preventDefault();
     if (e.dataTransfer) e.dataTransfer.getData("text");
-
-    if (el && el[0] && el[0].name !== name) exchange(el, name);
+    setEl((el) => ({
+      ...el,
+      new: findel(name),
+    }));
   };
   const findel = (el) => {
-    return flattenarr.filter((t) => {
+    return data.filter((t) => {
       return t.name === el;
     });
   };
-  const exchange = (el1, oldname) => {
-    console.log(JSON.stringify(flattenarr));
-    if (mode == 0) {
-      let oldel = findel(oldname);
-      let tempid = oldel[0].id;
-      let temppid = oldel[0].pid;
-      oldel[0].id = el1[0].id;
-      oldel[0].pid = el1[0].pid;
-      el1[0].id = tempid;
-      el1[0].pid = temppid;
-
-      flattenarr.splice(
-        flattenarr.findIndex((t) => {
-          return t.name === el1[0].name;
-        }),
-        1,
-        oldel[0]
-      );
-      flattenarr.splice(
-        flattenarr.findIndex((t) => {
-          return t.name === oldel[0].name;
-        }),
-        1,
-        el1[0]
-      );
-
-      mode = 1;
-      setTreee(arrtotree(flattenarr));
-      console.log(JSON.stringify(treee));
-      flattenarr = [];
-    }
+  const onDrop = (name) => {
+    //el.old[0].name = el.old[0].name.slice(5);
+    alert(el.old[0].name);
+    dispatch({ type: name, el: el });
   };
+  function dataReducer(state, action) {
+    switch (action.type) {
+      case "start":
+        return [...state];
+      case "add":
+        return [
+          ...state.map((t) => {
+            if (action.newArr.id === t.id) t.name = ".XX  " + t.name;
+            return t;
+          }),
+        ];
+      case "root":
+        return [
+          ...state
+            .filter((t) => {
+              return t.name.indexOf(".XX") === -1 && t;
+            })
+            .map((t) => {
+              return t;
+            }),
+        ];
+      default:
+        return [
+          ...state.filter((t) => {
+            return t.name.indexOf(".XX") === -1 && t;
+          }),
+        ];
+    }
+  }
 
   return (
     <TreeSettings
-      tree={treee}
+      id={el.new && el.new[0].id}
+      name={el.old && el.old[0].name}
+      data={data}
       onMouseDown={onMouseDown}
       onDragOver={onDragOver}
       onDragLeave={onDragLeave}
-      flattenarr={flattenarr}
+      onDrop={onDrop}
     />
   );
 };

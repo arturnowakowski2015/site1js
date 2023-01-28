@@ -1,37 +1,61 @@
 import "../views/scss/tree.scss";
 export default function TreeSettings({
-  tree,
-  flattenarr,
+  id,
+  name,
+  data,
   onMouseDown,
   onDragOver,
   onDragLeave,
-  onDragEnd,
+  onDrop,
 }) {
   return (
     <>
-      {tree &&
-        tree.map((t, i) => {
+      {data &&
+        data.map((t, i) => {
           return (
-            <div className="node" key={i}>
+            <div
+              className="node"
+              key={i}
+              style={{ paddingLeft: t.level * 10 + "px" }}
+            >
               <p
                 className="label"
                 draggable="true"
-                onMouseDown={(e) => onMouseDown(e, t.name)}
-                onDragOver={(e) => onDragOver(e, t.name)}
+                onMouseDown={(e) =>
+                  t.name !== "root" ? onMouseDown(e, t.name) : null
+                }
+                onDragOver={(e) =>
+                  name !== undefined
+                    ? onDragOver(e, t.name)
+                    : (name = undefined)
+                }
                 onDragLeave={(e) => onDragLeave(e)}
-                onDragEnd={() => onDragEnd()}
+                onDrop={() => onDrop(t.name)}
               >
                 {t.name}
-              </p>
-
-              <TreeSettings
-                tree={t.children}
-                onMouseDown={onMouseDown}
-                onDragOver={onDragOver}
-                flattenarr={flattenarr}
-                onDragLeave={onDragLeave}
-                onDragEnd={onDragEnd}
-              />
+              </p>{" "}
+              {id === i + 1 && t.name !== "root" && (
+                <p
+                  style={{
+                    backgroundColor: "red",
+                    marginLeft:
+                      (t.level === 0 || t.name === "root" ? 10 : t.level * 10) +
+                      "px",
+                  }}
+                >
+                  {t.level}/{t.name}/{name}
+                </p>
+              )}{" "}
+              {id === i + 1 && t.name === "root" && (
+                <p
+                  style={{
+                    backgroundColor: "blue",
+                    marginLeft: 0 + "px",
+                  }}
+                >
+                  {t.level}/{t.name}/{name}
+                </p>
+              )}
             </div>
           );
         })}
