@@ -65,6 +65,11 @@ export const tree = {
             },
             {
               name: "removed 2",
+              children: [
+                {
+                  name: "removed 2 3",
+                },
+              ],
             },
           ],
         },

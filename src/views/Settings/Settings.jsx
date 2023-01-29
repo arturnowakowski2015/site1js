@@ -13,12 +13,12 @@ const Settings = () => {
     flattenarr.sort((a, b) => a.id - b.id);
 
     dispatch({ type: "start" });
-    console.log(data);
+    /// console.log("ssssssss                      " + JSON.stringify(data));
     //setData(flattenarr);
   }, []);
 
   const onMouseDown = (e, name) => {
-    console.log(data);
+    /// console.log(data);
     if (e.dataTransfer) e.dataTransfer.setData("text", e.target.id);
     let act = findel(name);
     setEl((el) => ({ ...el, old: act }));
@@ -43,10 +43,55 @@ const Settings = () => {
     });
   };
   const onDrop = (name) => {
-    //el.old[0].name = el.old[0].name.slice(5);
-    alert(el.old[0].name);
-    dispatch({ type: name, el: el });
+    el.old[0].name = el.old[0].name.slice(5);
+    let pid = findparentid(el.old[0].name) - 1;
+    alert(pid);
+    data.splice(
+      data.findIndex((t) => {
+        return t.name === el.old[0].name && t;
+      }),
+      1
+    );
+    data.splice(
+      data.findIndex((t) => {
+        return t.name === el.new[0].name && t;
+      }) + 1,
+      0,
+      el.old[0]
+    );
+
+    ///console.log(name + "::::" + JSON.stringify(data));
+
+    tempid(el.old[0], tid);
+    dispatch({ type: name, data: data });
   };
+  const findparentid = (name) => {
+    return data.findIndex((t) => {
+      return t.name === name && t;
+    });
+  };
+  let tid = 0;
+  const tempid = (el) => {
+    data.map((t) => {
+      if (t.pid === el.id) {
+        if (tid === 0) {
+          alert(0);
+          t.pid = tid;
+          tid = t.id;
+          t.name = t.name + "   tid";
+        } else if (tid !== 0) {
+          alert(1);
+          tid = t.id;
+          t.pid = el.id;
+          t.name = t.name + "   " + el.name;
+        }
+        console.log(t.level + "::::" + JSON.stringify(data));
+        tempid(t);
+      }
+      return t;
+    });
+  };
+
   function dataReducer(state, action) {
     switch (action.type) {
       case "start":
@@ -59,15 +104,7 @@ const Settings = () => {
           }),
         ];
       case "root":
-        return [
-          ...state
-            .filter((t) => {
-              return t.name.indexOf(".XX") === -1 && t;
-            })
-            .map((t) => {
-              return t;
-            }),
-        ];
+        return [...action.data];
       default:
         return [
           ...state.filter((t) => {
