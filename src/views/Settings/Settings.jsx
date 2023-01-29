@@ -84,6 +84,7 @@ const Settings = () => {
           ":" +
           oldl
       );
+
       data[i].level = data[i].level - 1;
     }
     data.splice(
