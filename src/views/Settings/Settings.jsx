@@ -13,7 +13,6 @@ const Settings = () => {
     flattenarr.sort((a, b) => a.id - b.id);
 
     dispatch({ type: "start" });
-    console.log("ssssssss                      " + JSON.stringify(data));
     //setData(flattenarr);
   }, []);
 
@@ -51,57 +50,77 @@ const Settings = () => {
     let newidx = data.findIndex((t) => {
       return t.name === el.new[0].name && t;
     });
-    console.log(oldidx + ":::" + newidx);
-    setEl((el) => ({
-      ...el,
-      new: null,
-    }));
-    let oldl = el.old[0].level;
-    console.log(el.new[0].name);
-    el.new && el.new[0].name === "root"
-      ? (el.old[0].level = 0)
-      : el.new && el.new[0].name !== "root"
-      ? (el.old[0].level = el.new[0].level + 1)
-      : "";
 
     setEl((el) => ({
       ...el,
-      new: el.new,
+      new: null,
     }));
     let childid =
       data.findIndex((t) => {
         return t.name === el.old[0].name && t;
       }) + 1;
-    console.log(JSON.stringify(data) + "    pop" + childid);
-    for (let i = childid; i < data.length; i++) {
-      if (data[i].level === oldl) break;
-      alert(
-        data[i].name +
-          ":" +
-          data[i].level +
-          "//old/" +
-          el.old[0].name +
-          ":" +
-          oldl
+    let oldl = el.old[0].level;
+    if (oldidx > newidx) {
+      el.new && el.new[0].name === "root"
+        ? (el.old[0].level = 0)
+        : el.new && el.new[0].name !== "root"
+        ? (el.old[0].level = el.new[0].level + 1)
+        : "";
+
+      setEl((el) => ({
+        ...el,
+        new: el.new,
+      }));
+
+      for (let i = childid; i < data.length; i++) {
+        if (data[i].level <= oldl) break;
+        data[i].level = data[i].level - 1;
+      }
+      data.splice(
+        data.findIndex((t) => {
+          return t.name === el.old[0].name && t;
+        }),
+        1
+      );
+      data.splice(
+        data.findIndex((t) => {
+          return t.name === el.new[0].name && t;
+        }) + 1,
+        0,
+        el.old[0]
       );
 
-      data[i].level = data[i].level - 1;
-    }
-    data.splice(
-      data.findIndex((t) => {
-        return t.name === el.old[0].name && t;
-      }),
-      1
-    );
-    data.splice(
-      data.findIndex((t) => {
-        return t.name === el.new[0].name && t;
-      }) + 1,
-      0,
-      el.old[0]
-    );
+      dispatch({ type: name, data: data });
+    } else {
+      data.splice(
+        data.findIndex((t) => {
+          return t.name === el.old[0].name && t;
+        }),
+        1
+      );
+      for (let i = childid - 1; i < data.length; i++) {
+        if (data[i].level <= oldl) break;
+        data[i].level = data[i].level - 1;
+      }
+      data.splice(
+        data.findIndex((t) => {
+          return t.name === el.new[0].name && t;
+        }) + 1,
+        0,
+        el.old[0]
+      );
 
-    dispatch({ type: name, data: data });
+      data[
+        data.findIndex((t) => {
+          return t.name === el.new[0].name && t;
+        }) + 1
+      ].level =
+        data[
+          data.findIndex((t) => {
+            return t.name === el.new[0].name && t;
+          })
+        ].level + 1;
+    }
   };
 
   function dataReducer(state, action) {

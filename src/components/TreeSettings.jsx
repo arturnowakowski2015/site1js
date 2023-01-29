@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "../views/scss/tree.scss";
 export default function TreeSettings({
   id,
@@ -8,6 +9,7 @@ export default function TreeSettings({
   onDragLeave,
   onDrop,
 }) {
+  const [flag, setFlag] = useState(false);
   return (
     <div className="pop">
       {data &&
@@ -21,20 +23,26 @@ export default function TreeSettings({
               <p
                 className="label"
                 draggable="true"
-                onMouseDown={(e) =>
-                  t.name !== "root" ? onMouseDown(e, t.name) : null
-                }
-                onDragOver={(e) =>
+                onMouseDown={(e) => {
+                  setFlag(true);
+                  console.log(t.name !== "root");
+                  t.name !== "root" ? onMouseDown(e, t.name) : null;
+                }}
+                onDragOver={(e) => {
+                  setFlag(name !== "root" && true);
                   name !== undefined
                     ? onDragOver(e, t.name)
-                    : (name = undefined)
-                }
-                onDragLeave={(e) => onDragLeave(e)}
+                    : (name = undefined);
+                }}
+                onDragLeave={(e) => {
+                  setFlag(false);
+                  onDragLeave(e);
+                }}
                 onDrop={() => onDrop(t.name)}
               >
                 {t.name}
               </p>{" "}
-              {id === i + 1 && t.name !== "root" && (
+              {id === i + 1 && t.name !== "root" && flag === true && (
                 <p
                   style={{
                     backgroundColor: "red",
