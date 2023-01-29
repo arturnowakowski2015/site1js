@@ -12,7 +12,7 @@ const useConvertTree = (flattenarr) => {
     tree &&
       tree.map((t) =>
         tr.push({
-          name: t.root ? "root" : t.name,
+          name: t.name === "root" ? "root" : t.name,
           id: ++id,
           pid: pid[i],
           level: level,

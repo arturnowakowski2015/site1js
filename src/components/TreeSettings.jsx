@@ -9,7 +9,7 @@ export default function TreeSettings({
   onDrop,
 }) {
   return (
-    <>
+    <div className="pop">
       {data &&
         data.map((t, i) => {
           return (
@@ -59,6 +59,6 @@ export default function TreeSettings({
             </div>
           );
         })}
-    </>
+    </div>
   );
 }

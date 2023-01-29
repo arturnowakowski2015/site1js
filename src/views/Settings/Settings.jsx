@@ -13,7 +13,7 @@ const Settings = () => {
     flattenarr.sort((a, b) => a.id - b.id);
 
     dispatch({ type: "start" });
-    /// console.log("ssssssss                      " + JSON.stringify(data));
+    console.log("ssssssss                      " + JSON.stringify(data));
     //setData(flattenarr);
   }, []);
 
@@ -37,6 +37,7 @@ const Settings = () => {
       new: findel(name),
     }));
   };
+
   const findel = (el) => {
     return data.filter((t) => {
       return t.name === el;
@@ -44,8 +45,47 @@ const Settings = () => {
   };
   const onDrop = (name) => {
     el.old[0].name = el.old[0].name.slice(5);
-    let pid = findparentid(el.old[0].name) - 1;
-    alert(pid);
+    let oldidx = data.findIndex((t) => {
+      return t.name === el.old[0].name && t;
+    });
+    let newidx = data.findIndex((t) => {
+      return t.name === el.new[0].name && t;
+    });
+    console.log(oldidx + ":::" + newidx);
+    setEl((el) => ({
+      ...el,
+      new: null,
+    }));
+    let oldl = el.old[0].level;
+    console.log(el.new[0].name);
+    el.new && el.new[0].name === "root"
+      ? (el.old[0].level = 0)
+      : el.new && el.new[0].name !== "root"
+      ? (el.old[0].level = el.new[0].level + 1)
+      : "";
+
+    setEl((el) => ({
+      ...el,
+      new: el.new,
+    }));
+    let childid =
+      data.findIndex((t) => {
+        return t.name === el.old[0].name && t;
+      }) + 1;
+    console.log(JSON.stringify(data) + "    pop" + childid);
+    for (let i = childid; i < data.length; i++) {
+      if (data[i].level === oldl) break;
+      alert(
+        data[i].name +
+          ":" +
+          data[i].level +
+          "//old/" +
+          el.old[0].name +
+          ":" +
+          oldl
+      );
+      data[i].level = data[i].level - 1;
+    }
     data.splice(
       data.findIndex((t) => {
         return t.name === el.old[0].name && t;
@@ -60,36 +100,7 @@ const Settings = () => {
       el.old[0]
     );
 
-    ///console.log(name + "::::" + JSON.stringify(data));
-
-    tempid(el.old[0], tid);
     dispatch({ type: name, data: data });
-  };
-  const findparentid = (name) => {
-    return data.findIndex((t) => {
-      return t.name === name && t;
-    });
-  };
-  let tid = 0;
-  const tempid = (el) => {
-    data.map((t) => {
-      if (t.pid === el.id) {
-        if (tid === 0) {
-          alert(0);
-          t.pid = tid;
-          tid = t.id;
-          t.name = t.name + "   tid";
-        } else if (tid !== 0) {
-          alert(1);
-          tid = t.id;
-          t.pid = el.id;
-          t.name = t.name + "   " + el.name;
-        }
-        console.log(t.level + "::::" + JSON.stringify(data));
-        tempid(t);
-      }
-      return t;
-    });
   };
 
   function dataReducer(state, action) {
